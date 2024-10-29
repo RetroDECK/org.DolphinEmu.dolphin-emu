@@ -49,8 +49,8 @@ modules:
       - -Ddocumentation=disabled
     sources:
       - type: archive
-        url: https://www.freedesktop.org/software/libevdev/libevdev-1.13.2.tar.xz
-        sha256: 3eca86a6ce55b81d5bce910637fc451c8bbe373b1f9698f375c7f1ad0de3ac48
+        url: https://www.freedesktop.org/software/libevdev/libevdev-1.13.3.tar.xz
+        sha256: abf1aace86208eebdd5d3550ffded4c8d73bb405b796d51c389c9d0604cbcfbf
         x-checker-data:
           type: anitya
           project-id: 20540
@@ -65,6 +65,9 @@ modules:
         url: https://github.com/Unrud/xdg-screensaver-shim/archive/0.0.2.tar.gz
         sha256: 0ed2a69fe6ee6cbffd2fe16f85116db737f17fb1e79bfb812d893cf15c728399
 
+  # The kde runtime bundles 2.28.5 but current dolphin versions require 2.30.6
+  - SDL2/SDL2-no-libdecor.json
+
   - name: dolphin-emu
     buildsystem: cmake-ninja
     config-opts:
@@ -77,34 +80,22 @@ modules:
       - /share/man
     post-install:
       - install -D -t ${FLATPAK_DEST}/bin/ dolphin-emu-wrapper
-      - install -Dm644 -t ${FLATPAK_DEST}/share/appdata/ org.DolphinEmu.dolphin-emu.appdata.xml
-      - sed -i -e 's/viewBox="0 0 1024.02 571.29"/viewBox="0 -285.645 1024 1024" width="2048"
-        height="2048"/g' /app/share/icons/hicolor/scalable/apps/dolphin-emu.svg
+      - install -Dm644 -t ${FLATPAK_DEST}/share/metainfo/ org.DolphinEmu.dolphin-emu.metainfo.xml
       - desktop-file-edit --set-key=Exec --set-value='/app/bin/dolphin-emu-wrapper'
         /app/share/applications/dolphin-emu.desktop
     sources:
       - type: git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: cc3ff347b437fd80f3a2880d1bbc7ba2d5f191f4
-        # x-checker-data:
-        #   type: json
-        #   url: https://dolphin-emu.org/update/latest/beta
-        #   commit-query: .hash
-        #   version-query: .shortrev
-        #   timestamp-query: .date
-        #   is-main-source: true
-      # detects whether dolphin is running in a flatpak sandbox
-      # and makes it use xdg directories if it is.
-      # prevents dolphin from attempting to write conf files
-      # in non-writable paths, typically happens when a user
-      # has leftover files from a previous non-flatpak install
-      - type: patch
-        path: detectflatpak.patch
-      # version strings must match exactly for online multiplayer
-      - type: patch
-        path: nodirtyversion.patch
+        commit: 3c4d4fcd09173ea070dc812ab5d64ca3a3af5f29
+        x-checker-data:
+          type: json
+          url: https://dolphin-emu.org/update/latest/beta
+          commit-query: .hash
+          version-query: .shortrev
+          timestamp-query: .date
+          is-main-source: true
       - type: file
-        path: org.DolphinEmu.dolphin-emu.appdata.xml
+        path: org.DolphinEmu.dolphin-emu.metainfo.xml
       - type: script
         commands:
           - |
