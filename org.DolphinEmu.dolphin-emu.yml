@@ -103,5 +103,11 @@ modules:
               test -S $XDG_RUNTIME_DIR/discord-ipc-$i ||
                 ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
             done
+
+            if [[ $(check_desktop_mode) == "true" ]]; then
+                log d "Running Dolphin in Desktop Mode"
+                export QT_QPA_PLATFORM=xcb
+            fi
+
             dolphin-emu "$@"
         dest-filename: dolphin-emu-wrapper
