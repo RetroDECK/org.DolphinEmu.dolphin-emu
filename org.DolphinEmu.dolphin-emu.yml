@@ -104,6 +104,7 @@ modules:
                 ln -sf {app/com.discordapp.Discord,$XDG_RUNTIME_DIR}/discord-ipc-$i;
             done
 
+            source /app/libexec/checks.sh
             if [[ $(check_desktop_mode) == "true" ]]; then
                 log d "Running Dolphin in Desktop Mode"
                 export QT_QPA_PLATFORM=xcb
