@@ -18,7 +18,11 @@ finish-args:
   # required for the emulated bluetooth adapter feature to work.
   - --allow=bluetooth
   - --filesystem=xdg-run/app/com.discordapp.Discord:create
+  # required for screensaver inhibition on desktops with
+  # old or defective portal implementations.
   - --talk-name=org.freedesktop.ScreenSaver
+  - --talk-name=org.xfce.ScreenSaver
+  - --talk-name=org.mate.ScreenSaver
   # required for Gamescope on Steam Deck
   - --filesystem=xdg-run/gamescope-0:ro
 modules:
@@ -57,17 +61,6 @@ modules:
           stable-only: true
           url-template: https://www.freedesktop.org/software/libevdev/libevdev-$version.tar.xz
 
-  # needed for screensaver inhibition
-  - name: xdg-screensaver-shim
-    buildsystem: meson
-    sources:
-      - type: archive
-        url: https://github.com/Unrud/xdg-screensaver-shim/archive/0.0.2.tar.gz
-        sha256: 0ed2a69fe6ee6cbffd2fe16f85116db737f17fb1e79bfb812d893cf15c728399
-
-  # The kde runtime bundles 2.28.5 but current dolphin versions require 2.30.6
-  - SDL2/SDL2-no-libdecor.json
-
   - name: dolphin-emu
     buildsystem: cmake-ninja
     config-opts:
@@ -86,7 +79,7 @@ modules:
     sources:
       - type: git
         url: https://github.com/dolphin-emu/dolphin.git
-        commit: 3c4d4fcd09173ea070dc812ab5d64ca3a3af5f29
+        commit: 9763c0a1e2b9db0c3861d25bc2f5a0ace6a15ee3
         x-checker-data:
           type: json
           url: https://dolphin-emu.org/update/latest/beta
