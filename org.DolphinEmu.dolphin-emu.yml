@@ -100,8 +100,8 @@ modules:
             source /app/libexec/checks.sh
             if [[ $(check_desktop_mode) == "true" ]]; then
                 log d "Running Dolphin in Desktop Mode"
-                export QT_QPA_PLATFORM=xcb
+                QT_QPA_PLATFORM=xcb dolphin-emu "$@"
+            else
+                dolphin-emu "$@"
             fi
-
-            dolphin-emu "$@"
         dest-filename: dolphin-emu-wrapper
